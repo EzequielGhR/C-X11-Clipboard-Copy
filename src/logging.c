@@ -2,6 +2,14 @@
 #include <time.h>
 #include "logging.h"
 
+
+/**
+ * @brief Main logger for two different levels. ERROR_LEVEL or INFO_LEVEL.
+ * ERROR_LEVEL goes directly to stderr, while INFO_LEVEL goes to stdout.
+ * 
+ * @param message: The message to log.
+ * @param level: The level to log to.
+ */
 void logger(const char* message, const int level){
     // Create timestamp
     time_t now;
@@ -21,11 +29,21 @@ void logger(const char* message, const int level){
 }
 
 
+/**
+ * @brief Logs an error to stderr. No newline required.
+ * 
+ * @param message: The message to log to stderr.
+ */
 void log_error(const char* message){
     logger(message, ERROR_LEVEL);
 }
 
 
+/**
+ * @brief Logs a message to stdout. No newline required.
+ * 
+ * @param message: The message to log to stdout.
+ */
 void log(const char* message){
     logger(message, INFO_LEVEL);
 }
