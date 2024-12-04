@@ -4,6 +4,6 @@
     enum {INFO_LEVEL, ERROR_LEVEL};
 
     void logger(const char* message, const int level);
-    void log(const char* message);
+    void log_msg(const char* message);
     void log_error(const char* message);
 #endif

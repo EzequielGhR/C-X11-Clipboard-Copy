@@ -44,6 +44,6 @@ void log_error(const char* message){
  * 
  * @param message: The message to log to stdout.
  */
-void log(const char* message){
+void log_msg(const char* message){
     logger(message, INFO_LEVEL);
 }

@@ -11,7 +11,7 @@
 void cleanup(Display* display, Window window){
     XDestroyWindow(display, window);
     XCloseDisplay(display);
-    log("Successfully cleaned up window and display");
+    log_msg("Successfully cleaned up window and display");
 }
 
 
@@ -36,17 +36,17 @@ void copy_to_clipboard(const char* text){
         log_error("Unable to open connection with X Server");
         return;
     }
-    log("Successfully opened connection with X Server");
+    log_msg("Successfully opened connection with X Server");
 
     // Create invisible window, as subwindow of default root window.
     window = XCreateSimpleWindow(display, DefaultRootWindow(display), 0, 0, 1, 1, 0, 0, 0);
-    log("Successfully created a window");
+    log_msg("Successfully created a window");
 
     // Define clipboard atoms
     clipboard = XInternAtom(display, "CLIPBOARD", False);
     targets = XInternAtom(display, "TARGETS", False);
     utf_8_string = XInternAtom(display, "UTF8_STRING", False);
-    log("Created clipboard atoms");
+    log_msg("Created clipboard atoms");
 
     // Set data on clipboard
     XSetSelectionOwner(display, clipboard, window, CurrentTime);
@@ -57,7 +57,7 @@ void copy_to_clipboard(const char* text){
         cleanup(display, window);
         return;
     }
-    log("Successfully set clipboard ownership");
+    log_msg("Successfully set clipboard ownership");
 
     // Loop until request is served
     while(!served_request){
@@ -84,7 +84,7 @@ void copy_to_clipboard(const char* text){
         select_event.time = req_ptr->time;
 
         if (req_ptr->target == targets){
-            log("Targets requested");
+            log_msg("Targets requested");
             Atom available_targets[2] = {targets, utf_8_string};
 
             // Change property with available targets
@@ -94,7 +94,7 @@ void copy_to_clipboard(const char* text){
             select_event.property = req_ptr->property;
 
         } else if (req_ptr->target == utf_8_string){
-            log("Requested string");
+            log_msg("Requested string");
 
             // Respond with the clipboard content
             XChangeProperty(req_ptr->display, req_ptr->requestor, req_ptr->property, utf_8_string,
@@ -103,7 +103,7 @@ void copy_to_clipboard(const char* text){
             // Mark request as served to break the loop on the next iteration.
             select_event.property = req_ptr->property;
             served_request=True;
-            log("Text copied to clipboard");
+            log_msg("Text copied to clipboard");
 
         } else {
             log_error("Target is not on expected targets");
